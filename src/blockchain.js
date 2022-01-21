@@ -1,5 +1,5 @@
-import Block from "./block";
-import cryptoHash from "./crypto-hash";
+import Block from "./block.js";
+import cryptoHash from "./crypto-hash.js";
 
 class Blockchain {
   constructor() {
@@ -15,8 +15,24 @@ class Blockchain {
     this.chain.push(newBlock);
   }
 
+  replaceChain(chain) {
+    if (chain.length <= this.chain.length) {
+      console.log("The incoming chain is not longer than the current chain.");
+      return;
+    } else if (!this.isValidChain(chain)) {
+      console.log("The incoming chain is invalid.");
+      return;
+    } else {
+      console.log("Replacing blockchain with ", chain);
+      this.chain = chain;
+
+      console.log("The incoming chain has been replaced.");
+    }
+  }
+
   isValidChain(chain) {
     if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis())) {
+      // console.log("------");
       return false;
     }
 
@@ -24,16 +40,21 @@ class Blockchain {
       const block = chain[i];
 
       const actualPrevHash = chain[i - 1].hash;
-      const { timestamp, data, prevHash, hash } = block;
+      const { timestamp, data, prevHash, nonce, difficulty, hash } = block;
 
       if (prevHash !== actualPrevHash) {
+        console.log("The previous hash is not correct.");
         return false;
       }
 
-      if (hash !== cryptoHash(timestamp, prevHash, data)) return false;
+      if (hash !== cryptoHash(timestamp, prevHash, data, nonce, difficulty)) {
+        console.log("The hash is not correct.");
+        return false;
+      }
     }
+    console.log("The chain is valid.");
     return true;
   }
 }
 
-module.exports = Blockchain;
+export default Blockchain;
