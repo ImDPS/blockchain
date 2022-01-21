@@ -11,10 +11,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.10",
     "@babel/plugin-transform-modules-commonjs": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
     "jest": "^27.4.7"
   },
   "jest": {
     "verbose": true
+  },
+  "dependencies": {
+    "hex-to-binary": "^1.0.1"
   }
 }
